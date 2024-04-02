@@ -3,67 +3,93 @@
 #include <stdio.h>
 #include <string.h>
 
-static int GetSize(List_t *instance)
+static size_t GetSize(List_t *instance)
 {
     return instance->size;
 }
 
-static void *At(List_t *instance, int index)
+static void *At(List_t *instance, size_t index)
 {
-    return instance->data + index * instance->dataSize;
+    if(index >= instance->size)
+    {
+        printf("Index out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+    return instance->array[index];
 }
 
 static void Free(List_t *instance)
 {
-    free(instance->data);
-    instance->data = NULL;
-    instance->dataSize = 0;
-    instance->size = 0;
+    free(instance->array);
+    free(instance);
 }
 
-static void Push(List_t *instance, const void *data)
+static void Set(List_t *instance, void *data, size_t index)
 {
-    instance->size++;
-
-    void *temp = realloc(instance->data, instance->size * instance->dataSize);
-    if(temp == NULL)
+    if(index >= instance->size)
     {
-        printf("Error reallocating memory!");
-        free(temp);
+        printf("Index out of bounds\n");
         exit(EXIT_FAILURE);
     }
-    else
-    {
-        instance->data = temp;
-        memcpy(instance->data + (instance->size-1) * instance->dataSize, data, instance->dataSize);
-    }
+    instance->array[index] = data;
 }
 
-List_t List(size_t dataSize)
+static void Push(List_t *instance, void *data)
 {
-    List_t instance;
-
-    instance.Push = Push;
-    instance.Free = Free;
-    instance.At = At;
-    instance.GetSize = GetSize;
-
-    instance.dataSize = dataSize;
-
-    void *temp = malloc(instance.dataSize);
-
-    if(temp == NULL)
+    if(!(instance->size < instance->capacity))
     {
-        printf("Error allocating memory");
-        free(temp);
-        exit(0);
+        uint64_t tmp = (uint64_t) GROWTH_MULTI * (uint64_t) instance->capacity;
+        if(tmp > SIZE_MAX)
+        {
+            printf("Size overflow\n");
+            exit(EXIT_FAILURE);
+        }
+
+        size_t newCapacity = (size_t)tmp;
+        void *new = malloc(newCapacity * sizeof(*(instance->array)));
+
+        if(!new)
+        {
+            printf("Error reallocating array memory\n");
+            exit(EXIT_FAILURE);
+        }
+        memcpy(new, instance->array, instance->size * sizeof(*(instance->array)));
+        free(instance->array);
+        instance->array = new;
+        instance->capacity = newCapacity;
     }
-    else
+    instance->array[instance->size] = data;
+    instance->size++;
+}
+
+List_t *List()
+{
+    List_t *instance = malloc(sizeof(List_t));
+
+    if(!instance)
     {
-        instance.data = temp;
-        instance.size = 0;
+        printf("Error allocating memory for list\n");
+        free(instance);
+        return NULL;
     }
+
+    instance->capacity = INIT_CAPACITY;
+    instance->size = 0;
+    instance->array = malloc(instance->capacity * sizeof(*(instance->array)));
+
+    if(!instance->array)
+    {
+        printf("Error allocating memory for array\n");
+        free(instance->array);
+        free(instance);
+        return NULL;
+    }
+
+    instance->Push = Push;
+    instance->Set = Set;
+    instance->Free = Free;
+    instance->At = At;
+    instance->GetSize = GetSize;
 
     return instance;
-
 }
