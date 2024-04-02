@@ -56,8 +56,7 @@ Engine_t Engine(char *title, int width, int height)
         instance.quit = true;
     }
 
-    char *path = SDL_GetBasePath();
-    strcat(path, "assets/img/redcircle.png");
+    char *path = "assets/img/redcircle.png";
     instance.tex = Texture(path, NULL, instance.graphics);
 
     return instance;

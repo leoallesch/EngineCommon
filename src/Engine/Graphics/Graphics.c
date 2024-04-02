@@ -17,16 +17,16 @@ SDL_Texture *LoadTexture(Graphics_t *instance, const char *path)
     SDL_Surface *surface = IMG_Load(path);
     if(!surface)
     {
-        printf("Error Loading Image: Path(%s) - Error %s", path, IMG_GetError());
-        return tex;
+        printf("Error Loading Image: Path(%s) - Error %s\n", path, IMG_GetError());
+        return NULL;
     }
 
     tex = SDL_CreateTextureFromSurface(instance->renderer, surface);
-    
+
     if(!tex)
     {
         printf("Error creating texture: %s", SDL_GetError());
-        return tex;
+        return NULL;
     }
 
     SDL_FreeSurface(surface);
@@ -83,7 +83,7 @@ static bool Init(Graphics_t *instance, char *title, int width, int height)
         instance->window,
         -1,
         SDL_RENDERER_ACCELERATED);
-    
+
     if(!instance->renderer)
     {
         printf("Error creating renderer %s\n", SDL_GetError());
