@@ -13,7 +13,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CC_FLAGS := -std=c99 -Wall -O0 -g $(INC_FLAGS)
 
-LINKER_FLAGS := -lSDL2_ttf -lm
+LINKER_FLAGS := -lSDL2_ttf -lSDL2_image -lm
 SDL_FLAGS := `sdl2-config --cflags --libs`
 
 all: $(BUILD_DIR)/$(OBJ_NAME)
