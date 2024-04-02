@@ -2,16 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void Render(Entity_t *instance)
-{
-    (void)instance;
-}
-
-void Update(Entity_t *instance)
-{
-    (void)instance;
-}
-
 Vector2_t GetPos(Entity_t *instance, EntitySpace_t space)
 {
     if(space == LOCAL || instance->parent == NULL)
@@ -98,8 +88,8 @@ Entity_t *Entity(float x, float y)
     instance->SetActive = SetActive;
     instance->SetParent = SetParent;
     instance->GetParent = GetParent;
-    instance->Update = Update;
-    instance->Render = Render;
+    instance->Update = NULL;
+    instance->Render = NULL;
 
     instance->pos.x = x;
     instance->pos.y = y;

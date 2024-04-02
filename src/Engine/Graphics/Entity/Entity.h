@@ -31,8 +31,8 @@ typedef struct Entity_t
     void (*SetParent)(struct Entity_t *instance, struct Entity_t *parent);
     struct Entity_t *(*GetParent)(struct Entity_t *instance);
 
-    void (*Update)(struct Entity_t *instance);
-    void (*Render)(struct Entity_t *instance);
+    void (*Update)(void *context);
+    void (*Render)(void *context);
 } Entity_t;
 
 Entity_t *Entity(float x, float y);

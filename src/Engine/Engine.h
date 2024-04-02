@@ -2,17 +2,14 @@
 #define ENGINE_H
 
 #include <SDL2/SDL.h>
-#include "Graphics.h"
+#include "Texture.h"
 #include "Timer.h"
-#include "Entity.h"
 
 typedef struct Engine_t
 {
     Graphics_t *graphics;
     Timer_t *timer;
-
-    Entity_t *parent;
-    Entity_t *child;
+    Texture_t *tex;
 
     bool quit;
 

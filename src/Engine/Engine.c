@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <string.h>
 
 static const int FPS = 60;
 
@@ -18,7 +19,12 @@ static void Run(Engine_t *instance)
         }
         if(instance->timer->deltaTime >= 1.0f / FPS)
         {
+            instance->graphics->ClearBuffer(instance->graphics);
+
+            instance->tex->Render(instance->tex);
+
             instance->graphics->Render(instance->graphics);
+
             instance->timer->Reset(instance->timer);
         }
     }
@@ -31,11 +37,6 @@ static void Destroy(Engine_t *instance)
 
     instance->timer->Destroy(instance->timer);
     instance->timer = NULL;
-
-    instance->parent->Destroy(instance->parent);
-    instance->parent = NULL;
-    instance->child->Destroy(instance->child);
-    instance->child = NULL;
 }
 
 Engine_t Engine(char *title, int width, int height)
@@ -44,9 +45,6 @@ Engine_t Engine(char *title, int width, int height)
 
     instance.graphics = Graphics(title, width, height);
     instance.timer = Timer();
-    instance.parent = Entity(100.0f, 400.0f);
-    instance.child = Entity(100.0f, 500.0f);
-    instance.child->SetParent(instance.child, instance.parent);
 
     instance.quit = false;
 
@@ -57,6 +55,10 @@ Engine_t Engine(char *title, int width, int height)
     {
         instance.quit = true;
     }
+
+    char *path = SDL_GetBasePath();
+    strcat(path, "assets/img/redcircle.png");
+    instance.tex = Texture(path, NULL, instance.graphics);
 
     return instance;
 }
