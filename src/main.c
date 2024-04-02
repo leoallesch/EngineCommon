@@ -2,23 +2,22 @@
 
 #include "Engine.h"
 #include "List.h"
+#include "HashTable.h"
 
-// const char *title = "SDL2 Engine";
-// const int SCREEN_WIDTH = 1280;
-// const int SCREEN_HEIGHT = 720;
+static char *title = "SDL2 Engine";
+static int SCREEN_WIDTH = 1280;
+static int SCREEN_HEIGHT = 720;
 
 int main ()
 {
-    // Engine_t engine = Engine(title, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Engine_t engine = Engine(title, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // printf("Game is running...\n");
+    printf("Game is running...\n");
 
-    // engine.Run(&engine);
-    // engine.Destroy(&engine);
+    engine.Run(&engine);
+    engine.Destroy(&engine);
 
-    // printf("Exiting...\n");
-
-
+    printf("Exiting...\n");
 
     return 0;
 }

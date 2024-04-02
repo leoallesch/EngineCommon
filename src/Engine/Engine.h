@@ -3,12 +3,14 @@
 
 // #include <SDL2/SDL.h>
 #include "SDL.h"
+#include "AssetManager.h"
 #include "Texture.h"
 #include "Timer.h"
 
 typedef struct Engine_t
 {
     Graphics_t *graphics;
+    AssetManager_t *assetManager;
     Timer_t *timer;
     Texture_t *tex;
 

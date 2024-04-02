@@ -8,12 +8,16 @@ static void Render(void *context)
 
 static void Destroy(Texture_t *instance)
 {
-    SDL_DestroyTexture(instance->texture);
     instance->texture = NULL;
+    instance->assetManager = NULL;
     instance->graphics = NULL;
 }
 
-Texture_t *Texture(const char *path, Entity_t *entity, Graphics_t *graphics)
+Texture_t *Texture(
+    char *path,
+    Entity_t *entity,
+    AssetManager_t *assetManager,
+    Graphics_t *graphics)
 {
     Texture_t *instance = malloc(sizeof(Texture_t));
     memset(instance, 0, sizeof(Texture_t));
@@ -22,10 +26,17 @@ Texture_t *Texture(const char *path, Entity_t *entity, Graphics_t *graphics)
     instance->Render = Render;
 
     instance->entity = entity;
+    instance->assetManager = assetManager;
     instance->graphics = graphics;
-    instance->texture = instance->graphics->LoadTexture(
-        instance->graphics,
-        path);
 
+    instance->texture = instance->assetManager->GetTexture(instance->assetManager, path);
+
+    SDL_QueryTexture(
+        instance->texture,
+        NULL,
+        NULL,
+        &instance->width,
+        &instance->height);
+    
     return instance;
 }

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+make clean
+
+valgrind --tool=memcheck --leak-check=yes --leak-check=full ./run

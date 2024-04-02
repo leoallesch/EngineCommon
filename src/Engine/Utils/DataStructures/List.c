@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define INIT_CAPACITY 4
+#define GROWTH_MULTI 2
+
 static size_t GetSize(List_t *instance)
 {
     return instance->size;
@@ -18,7 +21,7 @@ static void *At(List_t *instance, size_t index)
     return instance->array[index];
 }
 
-static void Free(List_t *instance)
+static void Destroy(List_t *instance)
 {
     free(instance->array);
     free(instance);
@@ -87,7 +90,7 @@ List_t *List()
 
     instance->Push = Push;
     instance->Set = Set;
-    instance->Free = Free;
+    instance->Destroy = Destroy;
     instance->At = At;
     instance->GetSize = GetSize;
 

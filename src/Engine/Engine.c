@@ -35,6 +35,9 @@ static void Destroy(Engine_t *instance)
     instance->graphics->Destroy(instance->graphics);
     instance->graphics = NULL;
 
+    instance->assetManager->Destroy(instance->assetManager);
+    instance->assetManager = NULL;
+
     instance->timer->Destroy(instance->timer);
     instance->timer = NULL;
 }
@@ -44,6 +47,7 @@ Engine_t Engine(char *title, int width, int height)
     Engine_t instance = {0};
 
     instance.graphics = Graphics(title, width, height);
+    instance.assetManager = AssetManager(instance.graphics);
     instance.timer = Timer();
 
     instance.quit = false;
@@ -56,8 +60,11 @@ Engine_t Engine(char *title, int width, int height)
         instance.quit = true;
     }
 
-    char *path = "assets/img/redcircle.png";
-    instance.tex = Texture(path, NULL, instance.graphics);
-
+    instance.tex = Texture(
+        "redcircle.png",
+        NULL,
+        instance.assetManager,
+        instance.graphics);
+    
     return instance;
 }
