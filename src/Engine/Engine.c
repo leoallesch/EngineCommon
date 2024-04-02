@@ -19,6 +19,25 @@ static void Run(Engine_t *instance)
         }
         if(instance->timer->deltaTime >= 1.0f / FPS)
         {
+            instance->inputManager->Update(instance->inputManager);
+
+            instance->aTex->Update(instance->aTex);
+
+            if(instance->inputManager->KeyDown(
+                instance->inputManager, SDL_SCANCODE_D))
+            {
+                instance->entity->Translate(
+                    instance->entity,
+                    Vec2_MultiplyScalar(Vector2(40.0f, 0.0f), instance->timer->deltaTime));
+            }
+            else if(instance->inputManager->KeyDown(
+                instance->inputManager, SDL_SCANCODE_A))
+            {
+                instance->entity->Translate(
+                    instance->entity,
+                    Vec2_MultiplyScalar(Vector2(-40.0f, 0.0f), instance->timer->deltaTime));
+            }
+
             instance->graphics->ClearBuffer(instance->graphics);
 
             instance->tex->Render(instance->tex);
@@ -34,12 +53,18 @@ static void Destroy(Engine_t *instance)
 {
     instance->graphics->Destroy(instance->graphics);
     instance->graphics = NULL;
-
     instance->assetManager->Destroy(instance->assetManager);
     instance->assetManager = NULL;
-
+    instance->inputManager->Destroy(instance->inputManager);
+    instance->inputManager = NULL;
     instance->timer->Destroy(instance->timer);
     instance->timer = NULL;
+    instance->tex->Destroy(instance->tex);
+    instance->tex = NULL;
+    instance->aTex->Destroy(instance->aTex);
+    instance->aTex = NULL;
+    instance->entity->Destroy(instance->entity);
+    instance->entity = NULL;
 }
 
 Engine_t Engine(char *title, int width, int height)
@@ -48,6 +73,7 @@ Engine_t Engine(char *title, int width, int height)
 
     instance.graphics = Graphics(title, width, height);
     instance.assetManager = AssetManager(instance.graphics);
+    instance.inputManager = InputManager();
     instance.timer = Timer();
 
     instance.quit = false;
@@ -59,12 +85,24 @@ Engine_t Engine(char *title, int width, int height)
     {
         instance.quit = true;
     }
+    else
+    {
+        instance.entity = Entity(400.0f, 300.0f);
 
-    instance.tex = Texture(
-        "redcircle.png",
-        NULL,
-        instance.assetManager,
-        instance.graphics);
+        instance.tex = Texture(
+            "SpriteSheet.png",
+            instance.entity,
+            instance.assetManager,
+            instance.graphics);
+
+        instance.aTex = AnimatedTexture(
+            instance.tex,
+            instance.timer,
+            104, 45, 40, 48,
+            4, 3.0f, HORIZONTAL);
+    }
+
+
     
     return instance;
 }

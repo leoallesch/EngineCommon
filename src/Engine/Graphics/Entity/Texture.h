@@ -14,9 +14,15 @@ typedef struct Texture_t
 
     int width;
     int height;
+    bool clipped;
+
+    SDL_Rect renderRect;
+    SDL_Rect clippedRect;
+
 
     void (*Destroy)(struct Texture_t *instance);
     void (*Render)(void *context);
+    void (*Clip)(struct Texture_t *instance, int x, int y, int w, int h);
 } Texture_t;
 
 Texture_t *Texture(

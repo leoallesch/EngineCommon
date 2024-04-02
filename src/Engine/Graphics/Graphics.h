@@ -23,7 +23,7 @@ typedef struct Graphics_t
     void (*Render)(struct Graphics_t *instance);
     SDL_Texture *(*LoadTexture)(struct Graphics_t *instance, const char* path);
     void (*ClearBuffer)(struct Graphics_t *instance);
-    void (*DrawTexture)(struct Graphics_t *instance, SDL_Texture *tex);
+    void (*DrawTexture)(struct Graphics_t *instance, SDL_Texture *tex, SDL_Rect *clip, SDL_Rect *rend);
 } Graphics_t;
 
 Graphics_t *Graphics(char *title, int width, int height);

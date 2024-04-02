@@ -1,18 +1,22 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-// #include <SDL2/SDL.h>
-#include "SDL.h"
 #include "AssetManager.h"
-#include "Texture.h"
-#include "Timer.h"
+#include "InputManager.h"
+#include "AnimatedTexture.h"
 
 typedef struct Engine_t
 {
     Graphics_t *graphics;
+
     AssetManager_t *assetManager;
+    InputManager_t *inputManager;
+
     Timer_t *timer;
+
+    Entity_t *entity;
     Texture_t *tex;
+    AnimatedTexture_t *aTex;
 
     bool quit;
 

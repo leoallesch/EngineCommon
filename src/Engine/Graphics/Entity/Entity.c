@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void Translate(Entity_t *instance, Vector2_t vec)
+{
+    instance->pos = Vec2_Add(instance->pos, vec);
+}
+
 Vector2_t GetPos(Entity_t *instance, EntitySpace_t space)
 {
     if(space == LOCAL || instance->parent == NULL)
@@ -12,9 +17,9 @@ Vector2_t GetPos(Entity_t *instance, EntitySpace_t space)
     {
         Vector2_t parent = instance->parent->GetPos(instance->parent, GLOBAL);
         Vector2_t parentRotation = Vec2_Rotate(
-            &instance->pos,
+            instance->pos,
             instance->parent->GetRotation(instance->parent, LOCAL));
-        return Vec2_Add(&parent, &parentRotation);
+        return Vec2_Add(parent, parentRotation);
     }
 }
 
@@ -32,7 +37,7 @@ void SetParent(Entity_t *instance, Entity_t *parent)
 {
     Vector2_t pos = GetPos(instance, GLOBAL);
     Vector2_t parentPos = GetPos(parent, GLOBAL);
-    instance->pos = Vec2_Subtract(&pos, &parentPos);
+    instance->pos = Vec2_Subtract(pos, parentPos);
 
     instance->parent = parent;
 }
@@ -78,7 +83,6 @@ void Destroy(Entity_t *instance)
 Entity_t *Entity(float x, float y)
 {
     Entity_t *instance = malloc(sizeof(Entity_t));
-    memset(instance, 0 ,sizeof(Entity_t));
 
     instance->Destroy= Destroy;
     instance->SetPos = SetPos;
@@ -88,6 +92,7 @@ Entity_t *Entity(float x, float y)
     instance->SetActive = SetActive;
     instance->SetParent = SetParent;
     instance->GetParent = GetParent;
+    instance->Translate = Translate;
     instance->Update = NULL;
     instance->Render = NULL;
 

@@ -30,6 +30,7 @@ typedef struct Entity_t
     void (*SetActive)(struct Entity_t *instance, bool active);
     void (*SetParent)(struct Entity_t *instance, struct Entity_t *parent);
     struct Entity_t *(*GetParent)(struct Entity_t *instance);
+    void (*Translate)(struct Entity_t *instance, Vector2_t vec);
 
     void (*Update)(void *context);
     void (*Render)(void *context);

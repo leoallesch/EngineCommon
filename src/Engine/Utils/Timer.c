@@ -38,8 +38,6 @@ Timer_t *Timer()
 {
     Timer_t *instance = malloc(sizeof(Timer_t));
 
-    memset(instance, 0, sizeof(Timer_t));
-
     instance->Destroy = Destroy;
     instance->Reset = Reset;
     instance->Update = Update;

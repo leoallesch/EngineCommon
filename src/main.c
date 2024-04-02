@@ -5,8 +5,8 @@
 #include "HashTable.h"
 
 static char *title = "SDL2 Engine";
-static int SCREEN_WIDTH = 1280;
-static int SCREEN_HEIGHT = 720;
+static int SCREEN_WIDTH = 800;
+static int SCREEN_HEIGHT = 600;
 
 int main ()
 {

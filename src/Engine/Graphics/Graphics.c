@@ -1,8 +1,12 @@
 #include "Graphics.h"
 
-void DrawTexture(Graphics_t *instance, SDL_Texture *tex)
+void DrawTexture(
+    Graphics_t *instance,
+    SDL_Texture *tex,
+    SDL_Rect *clip,
+    SDL_Rect *rend)
 {
-    SDL_RenderCopy(instance->renderer, tex, NULL, NULL);
+    SDL_RenderCopy(instance->renderer, tex, clip, rend);
 }
 
 void ClearBuffer(Graphics_t *instance)
@@ -40,17 +44,16 @@ static void Render(Graphics_t *instance)
 
 static void Destroy(Graphics_t *instance)
 {
+    SDL_FreeSurface(instance->buffer);
+
     SDL_DestroyWindow(instance->window);
-    instance->window = NULL;
 
     SDL_DestroyRenderer(instance->renderer);
-    instance->renderer = NULL;
 
     IMG_Quit();
     SDL_Quit();
 
     free(instance);
-    instance = NULL;
 }
 
 static bool Init(Graphics_t *instance, char *title, int width, int height)
@@ -109,7 +112,6 @@ static bool Init(Graphics_t *instance, char *title, int width, int height)
 Graphics_t *Graphics(char *title, int width, int height)
 {
     Graphics_t *instance = malloc(sizeof(Graphics_t));
-    memset(instance, 0, sizeof(Graphics_t));
 
     instance->initialized = Init(instance, title, width, height);
 
