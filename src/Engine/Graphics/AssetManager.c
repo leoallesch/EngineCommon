@@ -6,17 +6,27 @@ static SDL_Texture *GetTexture(AssetManager_t *instance, char* filename)
 {
     char path[256] = "assets/img/";
     strcat(path, filename);
-    SDL_Texture* texture = (SDL_Texture *)instance->textures->Get(instance->textures, path);
-
-    if(texture == NULL)
+    bool loaded = false;
+    
+    for (int i = 0; i < instance->textures->size; i++)
     {
-        instance->textures->Put(
-            instance->textures,
-            path,
-            instance->graphics->LoadTexture(instance->graphics, path));
+        AssetEntry_t *entry = instance->textures->At(instance->textures, i);
+        if(strcmp(entry->key, path) == 0)
+        {
+            loaded = true;
+        }
     }
-    return (SDL_Texture *)instance->textures->Get(instance->textures, path);
 
+    SDL_Texture *texture = instance->graphics->LoadTexture(instance->graphics, path);
+
+    if(!loaded)
+    {
+        AssetEntry_t entry = {path, texture};
+        instance->textures->Push(
+            instance->textures,
+            &entry);
+    }
+    return texture;
 }
 
 static void Destroy(AssetManager_t *instance)
@@ -38,7 +48,7 @@ AssetManager_t *AssetManager(Graphics_t *graphics)
     }
 
     instance->graphics = graphics;
-    instance->textures = HashTable();
+    instance->textures = List();
 
     instance->Destroy = Destroy;
     instance->GetTexture = GetTexture;

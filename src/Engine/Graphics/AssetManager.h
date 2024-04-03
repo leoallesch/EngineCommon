@@ -2,24 +2,18 @@
 #define ASSETMANAGER_H
 
 #include "Graphics.h"
-#include "HashTable.h"
+#include "List.h"
 #include <stdint.h>
-
-enum
-{
-    AssetType_Texture
-};
-typedef uint8_t AssetType_t;
 
 typedef struct
 {
-    char *filename;
-    void *data;
+    char *key;
+    void *value;
 } AssetEntry_t;
 
 typedef struct AssetManager_t {
     Graphics_t *graphics;
-    HashTable_t *textures;
+    List_t *textures;
 
     void (*Destroy)(struct AssetManager_t *instance);
     SDL_Texture *(*GetTexture)(struct AssetManager_t *instance, char *filename);

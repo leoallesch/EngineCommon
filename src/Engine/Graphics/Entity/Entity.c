@@ -93,8 +93,6 @@ Entity_t *Entity(float x, float y)
     instance->SetParent = SetParent;
     instance->GetParent = GetParent;
     instance->Translate = Translate;
-    instance->Update = NULL;
-    instance->Render = NULL;
 
     instance->pos.x = x;
     instance->pos.y = y;

@@ -12,12 +12,12 @@ int main ()
 {
     Engine_t engine = Engine(title, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    printf("Game is running...\n");
+    // printf("Game is running...\n");
 
     engine.Run(&engine);
     engine.Destroy(&engine);
 
-    printf("Exiting...\n");
+    // printf("Exiting...\n");
 
     return 0;
 }

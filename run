@@ -1,3 +1,4 @@
 #!/bin/bash
 
-make run
+make
+./build/artifacts/target

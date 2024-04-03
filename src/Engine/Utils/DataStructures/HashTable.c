@@ -163,10 +163,9 @@ static void Destroy(HashTable_t *instance)
             free(curEntry);
             curEntry = NULL;
          }
-      }
       free(cur);
+      }
    }
-   free(instance->buckets);
    free(instance);
 }
 

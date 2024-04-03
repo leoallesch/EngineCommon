@@ -49,6 +49,7 @@ static void Destroy(Texture_t *instance)
     instance->texture = NULL;
     instance->assetManager = NULL;
     instance->graphics = NULL;
+    free(instance);
 }
 
 Texture_t *Texture(
@@ -58,6 +59,12 @@ Texture_t *Texture(
     Graphics_t *graphics)
 {
     Texture_t *instance = malloc(sizeof(Texture_t));
+    if(!instance)
+    {
+        printf("Error allocating memory for texure!\n");
+        free(instance);
+        return NULL;
+    }
 
     instance->Destroy = Destroy;
     instance->Render = Render;
@@ -68,7 +75,8 @@ Texture_t *Texture(
     instance->graphics = graphics;
     instance->clipped = false;
 
-    instance->texture = instance->assetManager->GetTexture(instance->assetManager, path);
+    instance->texture = instance->assetManager->GetTexture(
+        instance->assetManager, path);
 
     SDL_QueryTexture(
         instance->texture,
