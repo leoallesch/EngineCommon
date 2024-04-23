@@ -21,6 +21,14 @@ static void *At(List_t *instance, size_t index)
     return instance->array[index];
 }
 
+static void ForEach(List_t *instance, ListCallback_t callback)
+{
+    for(size_t i = 0; i < instance->size; i++)
+    {
+        callback(instance, &i);
+    }
+}
+
 static void Destroy(List_t *instance)
 {
     free(instance->array);
@@ -49,14 +57,14 @@ static void Push(List_t *instance, void *data)
         }
 
         size_t newCapacity = (size_t)tmp;
-        void *new = malloc(newCapacity * sizeof(*(instance->array)));
+        void *new = malloc(newCapacity * sizeof(sizeof(void *)));
 
         if(!new)
         {
             printf("Error reallocating array memory\n");
             exit(EXIT_FAILURE);
         }
-        memcpy(new, instance->array, instance->size * sizeof(*(instance->array)));
+        memcpy(new, instance->array, instance->size * sizeof(sizeof(void *)));
         free(instance->array);
         instance->array = new;
         instance->capacity = newCapacity;
@@ -78,7 +86,7 @@ List_t *List()
 
     instance->capacity = INIT_CAPACITY;
     instance->size = 0;
-    instance->array = malloc(instance->capacity * sizeof(*(instance->array)));
+    instance->array = malloc(instance->capacity * sizeof(void *));
 
     if(!instance->array)
     {
@@ -93,6 +101,7 @@ List_t *List()
     instance->Destroy = Destroy;
     instance->At = At;
     instance->GetSize = GetSize;
+    instance->ForEach = ForEach;
 
     return instance;
 }
